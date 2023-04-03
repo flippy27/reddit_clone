@@ -6,4 +6,5 @@ export class CreateThreadDto {
   created_at: Date;
 
   updated_at: Date;
+  theme_id: number
 }

@@ -1,17 +1,20 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Thread {
+export class Comment {
     @PrimaryGeneratedColumn()
     id: number
     @Column()
-    name: string
-    @Column()
     user_id: number
+    @Column({nullable: true})
+    parent_id: number
     @Column()
-    theme_id: number
-    @Column({ type: 'timestamptz' })
+    post_id: number
+    @Column()
+    comment_content: string
+    @Column({type:'timestamptz'})
     created_at: Date
-    @Column({ type: 'timestamptz' })
+    @Column({type:'timestamptz'})
     updated_at: Date
 }
+

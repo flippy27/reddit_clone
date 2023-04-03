@@ -10,6 +10,10 @@ import { ThreadModule } from './thread/thread.module';
 import { Thread } from './thread/entities/thread.entity';
 import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
+import { ThemeModule } from './theme/theme.module';
+import { Theme } from './theme/entities/theme.entity';
+import { CommentModule } from './comment/comment.module';
+import { Comment } from './comment/entities/comment.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -19,9 +23,9 @@ import { Post } from './post/entities/post.entity';
     username: 'postgres',
     password: '1234',
     database: 'reddit_clone',
-    entities: [Users, Role, Thread, Post],
+    entities: [Users, Role, Thread, Post, Theme, Comment],
     synchronize: true,
-  }),UsersModule, RoleModule, ThreadModule, PostModule,], 
+  }),UsersModule, RoleModule, ThreadModule, PostModule, ThemeModule, CommentModule,], 
   controllers: [AppController],
   providers: [AppService],
 })
