@@ -1,12 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Public } from 'src/common/decorators/public.decorator';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -19,12 +12,12 @@ export class CommentController {
   create(@Body() createCommentDto: CreateCommentDto) {
     return this.commentService.create(createCommentDto);
   }
-
+  @Public()
   @Get()
   findAll() {
     return this.commentService.findAll();
   }
-
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.commentService.findOne(id);
