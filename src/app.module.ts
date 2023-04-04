@@ -28,7 +28,7 @@ import { AuthGuard } from './auth/auth.guard';
       password: '1234',
       database: 'reddit_clone',
       entities: [Users, Role, Thread, Post, Theme, Comment],
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
     RoleModule,
