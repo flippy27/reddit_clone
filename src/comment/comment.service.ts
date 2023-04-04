@@ -24,7 +24,9 @@ export class CommentService {
   }
 
   async findByPostID(post_id: number) {
-    const root_comment: any = await this.repo.findBy({ post_id });
+    const root_comment: any = await this.repo.findOneBy({ post_id });
+    console.log('rc',root_comment);
+    
     if (root_comment == null) {
       return HttpStatus.NOT_FOUND;
     }
