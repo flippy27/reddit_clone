@@ -25,8 +25,8 @@ export class CommentService {
 
   async findByPostID(post_id: number) {
     const root_comment: any = await this.repo.findOneBy({ post_id });
-    console.log('rc',root_comment);
-    
+    console.log('rc', root_comment);
+
     if (root_comment == null) {
       return HttpStatus.NOT_FOUND;
     }
@@ -37,7 +37,7 @@ export class CommentService {
 
     return data;
   }
-  
+
   async getCommentsRecursively(root_comment_id: any): Promise<any[]> {
     const rootComment: any = await this.getOneByPostID(root_comment_id);
     if (!rootComment) {
@@ -52,7 +52,7 @@ export class CommentService {
         childComments.map(async (childComment: any) => {
           const childCommentTree = await buildCommentTree(childComment);
           return childCommentTree;
-        })
+        }),
       );
       return { ...comment, child_comments: childCommentTrees };
     };
@@ -60,12 +60,16 @@ export class CommentService {
     return [commentTree];
   }
 
+  findByPostID2(post_id: number) {
+    return this.repo.findBy({ post_id });
+  }
+
   getOneByPostID(post_id: number) {
     return this.repo.findOneBy({ post_id });
   }
 
   update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+    return this.repo.update(id, updateCommentDto);
   }
 
   remove(id: number) {

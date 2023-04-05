@@ -30,7 +30,7 @@ import { ConfigModule } from '@nestjs/config';
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       entities: [Users, Role, Thread, Post, Theme, Comment],
-      synchronize: false,
+      synchronize: true,
       
     }),
     UsersModule,
