@@ -30,6 +30,8 @@
 
 ```bash
 $ npm install
+$ create .env based on env example file
+$ change sync to true in app.module syncronize if anything fails
 ```
 
 ## Running the app
