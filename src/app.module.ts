@@ -17,18 +17,21 @@ import { Comment } from './comment/entities/comment.entity';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
-  imports: [
+  imports: [ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '1234',
-      database: 'reddit_clone',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT||5432,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
       entities: [Users, Role, Thread, Post, Theme, Comment],
       synchronize: false,
+      
     }),
     UsersModule,
     RoleModule,
