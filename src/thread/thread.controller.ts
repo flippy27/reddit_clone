@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ThreadService } from './thread.service';
 import { CreateThreadDto } from './dto/create-thread.dto';
 import { UpdateThreadDto } from './dto/update-thread.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('thread')
 export class ThreadController {
@@ -12,6 +13,7 @@ export class ThreadController {
     return this.threadService.create(createThreadDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.threadService.findAll();

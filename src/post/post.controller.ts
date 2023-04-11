@@ -19,9 +19,13 @@ export class PostController {
   @Get('user/:user_id')
   findAllByUserId(@Param('user_id') user_id: number){
     return this.postService.findAllByUserId(user_id)
-    
+  }
+  @Get('/:id')
+  findById(@Param('id') id:number){
+    return this.postService.findOne(id)
 
   }
+  
   @Get('theme/:theme_id')
   findAllByTheme(@Param('theme_id') theme_id: number){
     return this.postService.findAllByTheme(theme_id)

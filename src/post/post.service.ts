@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Users } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -9,7 +10,9 @@ import { Post } from './entities/post.entity';
 export class PostService {
   constructor(
     @InjectRepository(Post)
-    private repo : Repository<Post>
+    private repo : Repository<Post>,
+    @InjectRepository(Users)
+    private userRepo : Repository<Users>
 
   ){}
   create(createPostDto: CreatePostDto) {
@@ -20,8 +23,15 @@ export class PostService {
     return this.repo.find()
   }
 
-  findOne(id: number) {
-    return this.repo.findBy({id});
+  async findOne(id: number) {
+    
+    const post = await this.repo.findOneBy({id});
+    const userid= post.user_id
+    const username= await this.userRepo.findOne({  
+      select: ['user_name'], where :{id:userid}
+    })
+    post['user']=username
+    return post
   }
   findAllByUserId(user_id: number){
     return this.repo.findBy({user_id})

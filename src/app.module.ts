@@ -18,6 +18,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { ConfigModule } from '@nestjs/config';
+import { UserThreadFollowingModule } from './user_thread_following/user_thread_following.module';
+import { UserThreadFollowing } from './user_thread_following/entities/user_thread_following.entity';
 
 
 @Module({
@@ -29,7 +31,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [Users, Role, Thread, Post, Theme, Comment],
+      entities: [Users, Role, Thread, Post, Theme, Comment, UserThreadFollowing],
       synchronize: true,
       
     }),
@@ -40,6 +42,7 @@ import { ConfigModule } from '@nestjs/config';
     ThemeModule,
     CommentModule,
     AuthModule,
+    UserThreadFollowingModule,
   ],
   controllers: [AppController],
   providers: [AppService,   {
