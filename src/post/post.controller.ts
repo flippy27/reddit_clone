@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('post')
 export class PostController {
@@ -20,6 +21,8 @@ export class PostController {
   findAllByUserId(@Param('user_id') user_id: number){
     return this.postService.findAllByUserId(user_id)
   }
+
+  @Public()
   @Get('/:id')
   findById(@Param('id') id:number){
     return this.postService.findOne(id)
