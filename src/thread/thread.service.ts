@@ -9,30 +9,40 @@ import { Thread } from './entities/thread.entity';
 export class ThreadService {
   constructor(
     @InjectRepository(Thread)
-    private repo : Repository<Thread>
-
-  ){}
+    private repo: Repository<Thread>,
+  ) {}
   create(createThreadDto: CreateThreadDto) {
-    return this.repo.insert(createThreadDto)
+    return this.repo.insert(createThreadDto);
   }
 
   findAll() {
-    return this.repo.find()
+    return this.repo.find();
   }
-  findAllByUserId(user_id: number){
-    return this.repo.findBy({user_id})
-
+  findAllByUserId(user_id: number) {
+    return this.repo.query(`
+    SELECT t.id, t."name", t.created_at, u.user_name, th."name" AS theme_name  FROM thread t 
+    JOIN users u ON t.user_id = u.id
+    JOIN theme th ON t.theme_id= th.id 
+     WHERE t.user_id =`+user_id)
+  }
+  findByName(name: string) {
+    return this.repo
+      .createQueryBuilder('thread')
+      .where('LOWER(thread.name) like :name', {
+        name: `%${name.toLowerCase()}%`,
+      })
+      .getMany();
   }
 
   findOne(id: number) {
-    return this.repo.findBy({id});
+
   }
 
   update(id: number, updateThreadDto: UpdateThreadDto) {
-    return `This action updates a #${id} thread`;
+    return this.repo.update(id, updateThreadDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} thread`;
+    return this.repo.delete(id);
   }
 }

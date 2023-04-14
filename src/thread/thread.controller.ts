@@ -23,6 +23,12 @@ export class ThreadController {
     return this.threadService.findAllByUserId(user_id)
 
   }
+  @Public()
+  @Get('search/:name')
+  findByName(@Param('name') name: string){
+    return this.threadService.findByName(name)
+  }
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
