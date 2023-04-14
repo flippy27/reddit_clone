@@ -15,7 +15,8 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
-
+  
+  @Public()
   @Post()
   create(@Body() createCommentDto: CreateCommentDto) {
     return this.commentService.create(createCommentDto);
@@ -32,8 +33,8 @@ export class CommentController {
   }
 
   /**
-   * 
-   * @param post_id 
+   *
+   * @param post_id
    * @returns a recursive array of every comment child of the root comment
    */
   @Get('post/:post_id')

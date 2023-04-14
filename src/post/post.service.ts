@@ -29,7 +29,6 @@ export class PostService {
     const post = await this.repo.findOneBy({ id });
 
     const userid = post.user_id;
-    console.log('user_id', userid);
 
     const username = await this.userRepo.findOne({
       select: ['user_name'],
@@ -40,10 +39,29 @@ export class PostService {
     const rootComments = await this.commentRepo.findBy({ post_id });
     console.log('pre post', post);
 
-    post['comments'] = await this.commentRepo.findBy({ post_id });
+    const all_comments = await this.commentRepo.findBy({ post_id });
+    for (let i = 0; i < all_comments.length; i++) {
+      const element = all_comments[i];
+      const user_id: any = element.user_id;
+      const user = await this.userRepo.findOne({
+        select: ['user_name'],
+        where: { id: user_id },
+      });
+      element['user'] = user;
+    }
+    post['comments'] = all_comments;
     console.log('post post', post);
 
     return post;
+  }
+  getUserForComment(user_id) {
+    return new Promise((res, rej) => {
+      try {
+        res(this.userRepo.findOneBy(user_id));
+      } catch {
+        rej(null);
+      }
+    });
   }
 
   findAllByUserId(user_id: number) {

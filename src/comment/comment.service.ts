@@ -33,7 +33,7 @@ export class CommentService {
     const id = root_comment.id;
 
     const data = await this.getCommentsRecursively(id);
-    console.log(data);
+    console.log('deita',data);
 
     return data;
   }
@@ -73,6 +73,6 @@ export class CommentService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} comment`;
+    return this.repo.delete(id);
   }
 }
