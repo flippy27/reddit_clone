@@ -28,6 +28,11 @@ export class ThreadController {
   findByName(@Param('name') name: string){
     return this.threadService.findByName(name)
   }
+  @Public()
+  @Get('posts/:thread_id')
+  findThreadPosts(@Param('thread_id') thread_id: number){
+    return this.threadService.findThreadPosts(thread_id)
+  }
   
 
   @Get(':id')
