@@ -10,7 +10,7 @@ export class Users {
     email: string
     @Column()
     password: string
-    @Column()
+    @Column({default:1})
     role_id: number
     @Column()
     salt: string
