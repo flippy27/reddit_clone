@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { item_image } from 'src/entities/item_image.entity';
 import { Post } from 'src/post/entities/post.entity';
 import { Repository } from 'typeorm';
 import { CreateThreadDto } from './dto/create-thread.dto';
@@ -13,6 +14,8 @@ export class ThreadService {
     private repo: Repository<Thread>,
     @InjectRepository(Post)
     private postRepo: Repository<Post>,
+    @InjectRepository(item_image)
+    private imageRepo: Repository<item_image>,
   ) {}
   create(createThreadDto: CreateThreadDto) {
     return this.repo.insert(createThreadDto);
@@ -42,8 +45,12 @@ export class ThreadService {
     let thread = await this.repo.findOneBy({ id });
     const thread_id = id;
     let posts = await this.postRepo.findBy({ thread_id });
-    console.log(posts);
-    
+    for await (const post of posts) {
+      let item_type_id=3
+      let item_id= post.id
+      let images= await this.imageRepo.findBy({ item_type_id, item_id})
+      post['images']= images
+    } 
     thread['posts']= posts
     return thread
   }

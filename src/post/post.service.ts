@@ -6,6 +6,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
+import { item_image } from 'src/entities/item_image.entity';
+import { item_image_DTO } from 'src/entities/Dtos/item_image.dto';
 
 @Injectable()
 export class PostService {
@@ -16,9 +18,23 @@ export class PostService {
     private userRepo: Repository<Users>,
     @InjectRepository(Comment)
     private commentRepo: Repository<Comment>,
+    @InjectRepository(item_image)
+    private itemImage: Repository<item_image>,
   ) {}
-  create(createPostDto: CreatePostDto) {
-    return this.repo.insert(createPostDto);
+
+
+  async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
+    let postReturn = await this.repo.insert(createPostDto);
+    let image = {
+      image_name: file.path.split('\\')[1],
+      image_extension: file.originalname.split('.')[1],
+      item_type_id: 3,
+      item_id: postReturn.identifiers[0].id ,
+      image_type_id: 3,
+    };
+    createPostDto.item_type_id = 3;
+    let imageReturn = await this.itemImage.insert(image);
+    return { postReturn, imageReturn };
   }
 
   findAll() {

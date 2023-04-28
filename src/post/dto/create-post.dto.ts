@@ -6,6 +6,7 @@ export class CreatePostDto {
     post_content: string
     vote_count: number
     thread_id: number
+    item_type_id: number
     created_at: Date
     updated_at: Date
 }
