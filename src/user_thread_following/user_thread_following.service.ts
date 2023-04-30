@@ -35,7 +35,7 @@ export class UserThreadFollowingService {
     });
     for (const thread of threads) {
       const thread_id = thread.id;
-      const posts = await this.postRepo.findBy({ thread_id });
+      const posts = await this.postRepo.findBy(thread);
       thread['posts'] = posts;
     }
     return threads;

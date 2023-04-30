@@ -24,8 +24,9 @@ import { SharedModule } from './shared/shared/shared.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { item_type } from './entities/item_type.entity';
-import { item_image } from './entities/item_image.entity';
+import { ItemImage } from './entities/item_image.entity';
 import { image_type } from './entities/image_type.entity';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -44,12 +45,13 @@ import { image_type } from './entities/image_type.entity';
         Post,
         Theme,
         Comment,
-        UserThreadFollowing,
+        //UserThreadFollowing,
         item_type,
-        item_image,
+        ItemImage,
         image_type,
       ],
       synchronize: true,
+      namingStrategy: new SnakeNamingStrategy()
     }),
     UsersModule,
     RoleModule,

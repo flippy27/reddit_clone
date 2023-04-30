@@ -19,12 +19,21 @@ export class CommentService {
     return this.repo.find();
   }
 
-  findOne(id: number) {
-    return this.repo.findBy({ id });
+  async findOne(id: number) {
+    /* return this.repo
+      .createQueryBuilder('comment')
+      .leftJoinAndSelect('post.id', 'post_id')
+      .where('comment.id = :id', { id: id })
+      .getOne(); */
+    const comment = await this.repo.findOne({
+      where: { id: id },
+    });
+
+    return comment;
   }
 
-  async findByPostID(post_id: number) {
-    const root_comment: any = await this.repo.findOneBy({ post_id });
+  async findByPostID(post) {
+    const root_comment: any = await this.repo.findOneBy(post);
     console.log('rc', root_comment);
 
     if (root_comment == null) {
@@ -33,7 +42,7 @@ export class CommentService {
     const id = root_comment.id;
 
     const data = await this.getCommentsRecursively(id);
-    console.log('deita',data);
+    console.log('deita', data);
 
     return data;
   }
@@ -60,12 +69,12 @@ export class CommentService {
     return [commentTree];
   }
 
-  findByPostID2(post_id: number) {
-    return this.repo.findBy({ post_id });
+  findByPostID2(post) {
+    return this.repo.findBy(post);
   }
 
-  getOneByPostID(post_id: number) {
-    return this.repo.findOneBy({ post_id });
+  getOneByPostID(post) {
+    return this.repo.findOneBy(post);
   }
 
   update(id: number, updateCommentDto: UpdateCommentDto) {

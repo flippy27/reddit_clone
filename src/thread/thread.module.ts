@@ -4,10 +4,10 @@ import { ThreadController } from './thread.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Thread } from './entities/thread.entity';
 import { Post } from 'src/post/entities/post.entity';
-import { item_image } from 'src/entities/item_image.entity';
+import { ItemImage } from 'src/entities/item_image.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Thread, Post, item_image])],
+  imports:[TypeOrmModule.forFeature([Thread, Post, ItemImage])],
   controllers: [ThreadController],
   providers: [ThreadService]
 })

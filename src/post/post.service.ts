@@ -6,8 +6,9 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
-import { item_image } from 'src/entities/item_image.entity';
+import { ItemImage } from 'src/entities/item_image.entity';
 import { item_image_DTO } from 'src/entities/Dtos/item_image.dto';
+import { Theme } from 'src/theme/entities/theme.entity';
 
 @Injectable()
 export class PostService {
@@ -18,10 +19,9 @@ export class PostService {
     private userRepo: Repository<Users>,
     @InjectRepository(Comment)
     private commentRepo: Repository<Comment>,
-    @InjectRepository(item_image)
-    private itemImage: Repository<item_image>,
+    @InjectRepository(ItemImage)
+    private itemImage: Repository<ItemImage>,
   ) {}
-
 
   async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
     let postReturn = await this.repo.insert(createPostDto);
@@ -29,7 +29,7 @@ export class PostService {
       image_name: file.path.split('\\')[1],
       image_extension: file.originalname.split('.')[1],
       item_type_id: 3,
-      item_id: postReturn.identifiers[0].id ,
+      item_id: postReturn.identifiers[0].id,
       image_type_id: 3,
     };
     createPostDto.item_type_id = 3;
@@ -42,20 +42,24 @@ export class PostService {
   }
 
   async findOne(id: number) {
-    const post = await this.repo.findOneBy({ id });
-
-    const userid = post.user_id;
+    const post = await this.repo.findOne({
+      where: { id: id },
+      relations: ['user', 'themes','comments'],
+    });
+    //const all_comments = await this.commentRepo.findBy(post);
+    return post;
+    /*   const post = await this.repo.findOneBy({ id });
 
     const username = await this.userRepo.findOne({
       select: ['user_name'],
-      where: { id: userid },
+      where: { id: post.user.id },
     });
     post['user'] = username;
     const post_id = post.id;
-    const rootComments = await this.commentRepo.findBy({ post_id });
-    console.log('pre post', post);
+    const rootComments = await this.commentRepo.findBy(post);
+    console.log('pre post', post); */
 
-    const all_comments = await this.commentRepo.findBy({ post_id });
+    /* const all_comments = await this.commentRepo.findBy({ post_id });
     for (let i = 0; i < all_comments.length; i++) {
       const element = all_comments[i];
       const user_id: any = element.user_id;
@@ -68,7 +72,7 @@ export class PostService {
     post['comments'] = all_comments;
     console.log('post post', post);
 
-    return post;
+    return post; */
   }
   getUserForComment(user_id) {
     return new Promise((res, rej) => {
@@ -80,14 +84,14 @@ export class PostService {
     });
   }
 
-  findAllByUserId(user_id: number) {
-    return this.repo.findBy({ user_id });
+  findAllByUserId(user) {
+    return this.repo.findBy(user);
   }
-  findAllByTheme(theme_id: number) {
-    return this.repo.findBy({ theme_id });
+  findAllByTheme(theme) {
+    return this.repo.findBy(theme);
   }
-  findAllByThread(thread_id: number) {
-    return this.repo.findBy({ thread_id });
+  findAllByThread(thread) {
+    return this.repo.findBy(thread);
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
